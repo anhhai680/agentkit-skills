@@ -103,7 +103,7 @@ If developer says "help me choose", use their Step 1 answers (complexity, constr
 
 ---
 
-#### 2b — Indexing & Embedding Strategy
+#### Indexing & Embedding Strategy
 
 **Purpose:** If the agent uses RAG, document retrieval, or any vector-based memory, the embedding model and indexing approach directly determine retrieval quality and latency. Skip this sub-step only if the agent is fully stateless with no document retrieval.
 
