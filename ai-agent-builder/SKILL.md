@@ -363,7 +363,7 @@ After Step 7, do the following:
 
 - [ ] All 7 steps have answers (none skipped)
 - [ ] Model recommendation is justified against task complexity
-- [ ] If agent uses RAG/retrieval: embedding model, chunking strategy, vector store, retrieval method, and index update policy are all specified
+- [ ] If agent uses RAG/retrieval, the full strategy is specified (embedding, chunking, vector store, retrieval method, and index update policy).
 - [ ] Framework choice matches team skill level and project stage
 - [ ] Every tool has a defined failure behavior
 - [ ] Memory types match the agent's statefulness needs
