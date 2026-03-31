@@ -39,6 +39,13 @@ The agent is idle until a trigger fires — then activates, completes its task, 
 **Example:** Agent wakes when a new GitHub PR is opened, reviews it, and posts a comment.
 **Tradeoff:** Efficient (no wasted compute), but harder to test and debug since execution is asynchronous.
 
+### F) Hybrid / Composite
+Real-world agents often combine patterns. An orchestrator (Hierarchical) may fan out to parallel sub-agents, each running a sequential pipeline internally, with retry loops on quality gates.
+
+**Best for:** Complex production systems with multiple stages, mixed latency requirements, and diverse sub-tasks.
+**Example:** A research agent orchestrates three parallel sub-agents (web search, DB query, doc retrieval). Each sub-agent runs a sequential pipeline internally. The orchestrator retries any sub-agent that returns low-confidence results before synthesizing the final answer.
+**Tradeoff:** Most expressive, but highest design and debugging complexity. Only reach for this when simpler patterns clearly won't cover the requirements.
+
 ---
 
 ## Choosing a Pattern
@@ -51,3 +58,28 @@ The agent is idle until a trigger fires — then activates, completes its task, 
 | Complex goal needing specialization | Hierarchical |
 | React to external triggers / events | Event-Driven |
 | Long-running workflow with multiple phases | Hierarchical + Sequential |
+| Enterprise agent with mixed sub-task types | Hybrid / Composite |
+
+## Input / Output Modality Notes
+
+The input and output modalities affect architecture decisions:
+
+| Modality | Implication |
+|----------|------------|
+| Voice / audio input | Need ASR (speech-to-text) stage before the model |
+| Image / screenshot | Need a vision-capable model (see Step 2) |
+| Structured data (JSON, CSV) | Consider schema validation at ingestion |
+| File / document | Need a parsing + chunking pipeline (see Step 3) |
+| API event / webhook | Event-driven pattern is strongly recommended |
+| Action on external system | Security & rollback become critical (see Step 9) |
+
+## Volume / Scale Notes
+
+Task volume shapes infrastructure choices across multiple steps:
+
+| Volume | Framework implication | Memory implication | Cost implication |
+|--------|----------------------|-------------------|-----------------|
+| Low (<100/day) | Prototype frameworks OK | In-process memory fine | Cost is negligible; optimize later |
+| Medium (100–10K/day) | Production framework needed | Shared external store | Monitor cost per task actively |
+| High (10K–1M/day) | Async queue + horizontal scale | Distributed shared memory | Cost dominates; aggressive optimization required |
+| Bursty | Serverless / auto-scaling target | Stateless preferred | Pre-warm or accept cold-start latency |
